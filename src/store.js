@@ -1,19 +1,14 @@
-import { createStore, compose, applyMiddleware } from "redux"
-import rootReducer from "./reducer"
-import { sayHiOnDispatch, includeMeaningOfLife } from "./exampleAddons/enhancers"
-import { print1, print2, print3 } from "./exampleAddons/middleware"
+import { configureStore } from '@reduxjs/toolkit'
 
-let preloadedState
-const persistedTodosString = localStorage.getItem('todos')
+import todosReducer from './features/todos/todosSlice'
+import filtersReducer from './features/filters/filtersSlice'
 
-if (persistedTodosString) {
-    preloadedState = {
-        todos: JSON.parse(persistedTodosString)
-    }
-}
-
-const middleware = applyMiddleware(print1, print2, print3)
-const composedEnhancer = compose(sayHiOnDispatch, includeMeaningOfLife)
-const store = createStore(rootReducer, middleware)
+const store = configureStore({
+  reducer: {
+    // Define a top-level state field named `todos`, handled by `todosReducer`
+    todos: todosReducer,
+    filters: filtersReducer,
+  },
+})
 
 export default store
